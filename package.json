@@ -19,11 +19,16 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
+  "extends": "react-app",
+  "overrides": [
+    {
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ]
+},
+
   "browserslist": {
     "production": [
       ">0.2%",
