@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Filters from "./Filters";
 import PetBrowser from "./PetBrowser";
-import data from "./db.jason";
+import data from "..db.json";
 
 function App() {
   const [filters, setFilters] = useState({ type: 'all' });

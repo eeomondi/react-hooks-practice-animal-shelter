@@ -2,7 +2,7 @@ import React from "react";
 
 function Pet() {
   const handleAdoptPet = () => {
-    onAdoptPet(pet.id);
+    onAdoptPet(Pet.id);
   };
 
   
