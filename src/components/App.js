@@ -13,6 +13,40 @@ function App() {
   const [animalType, setAnimalType] = useState("all");
   const [filteredPets, setFilteredPets] = useState(pets);
 
+  
+  useEffect(() => {
+    fetchPets();
+  }, [filters]);
+
+  const fetchPets = async () => {
+    let url = "https://zoo-animal-api.herokuapp.com/animals";
+    if (filters.type !== "all") {
+      url += `?animal_type=${filters.type}`;
+    }
+    const response = await fetch(url);
+    const data = await response.json();
+    setPets(data);
+  };
+
+  const onChangeType = (type) => {
+    setFilters({ type });
+  };
+
+  const onFindPetsClick = () => {
+    fetchPets();
+  };
+
+  const onAdoptPet = (id) => {
+    setPets((prevPets) =>
+      prevPets.map((pet) => {
+        if (pet.id === id) {
+          return { ...pet, isAdopted: true };
+        }
+        return pet;
+      })
+    );
+  };
+
   const handleAnimalTypeChange = (event) => {
     setAnimalType(event.target.value);
     if (event.target.value === "all") {
