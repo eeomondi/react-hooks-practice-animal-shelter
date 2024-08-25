@@ -1,6 +1,6 @@
 import React from "react";
 
-function Filters() {
+function Filters({onChangeType, onFindPetsClick}) {
   const handleTypeChange = (event)  => {
     onChangeType(event.target.value);
   };
@@ -22,7 +22,9 @@ function Filters() {
       </div>
 
       <div className="field">
-        <button className="ui secondary button">Find pets</button>
+        <button className="ui secondary button" onClick={handleFindPetsClick}>
+          Find pets
+        </button>
       </div>
     </div>
   );
