@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PetBrowser from "./PetBrowser";
+import data from "./db.json";
 
 function App() {
   const [pets, setPets] = useState([
