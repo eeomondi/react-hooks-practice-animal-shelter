@@ -1,4 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import PetBrowser from "./PetBrowser";
+
+function App() {
+  const [pets, setPets] = useState([
+    { id: 1, name: "Buddy", type: "dog", age: 2, weight: 20, gender: "male", isAdopted: false },
+    { id: 2, name: "Whiskers", type: "cat", age: 1, weight: 10, gender: "female", isAdopted: false },
+    { id: 3, name: "Fido", type: "dog", age: 3, weight: 30, gender: "male", isAdopted: false },
+    { id: 4, name: "Mittens", type: "cat", age: 2, weight: 15, gender: "female", isAdopted: false },
+  ]);
+
+  const [animalType, setAnimalType] = useState("all");
+  const [filteredPets, setFilteredPets] = useState(pets);
+
+  const handleAnimalTypeChange = (event) => {
+    setAnimalType(event.target.value);
+    if (event.target.value === "all") {
+      setFilteredPets(pets);
+    } else {
+      setFilteredPets(pets.filter((pet) => pet.type === event.target.value));
+    }
+  };
+
+  const handleFindPetsClick = () => {
+    if (animalType === "all") {
+      setFilteredPets(pets);
+    } else {
+      setFilteredPets(pets.filter((pet) => pet.type === animalType));
+    }
+  };
+
+  const handleAdoptPet = (petId) => {
+    setPets(pets.map((pet) => (pet.id === petId ? { ...pet, isAdopted: true } : pet)));
+  };
+
+  return (
+    <div>
+      <h1>Pet Adoption</h1>
+      <select value={animalType} onChange={handleAnimalTypeChange}>
+        <option value="all">All</option>
+        <option value="dog">Dogs</option>
+        <option value="cat">Cats</option>
+      </select>
+      <button onClick={handleFindPetsClick}>Find pets</button>
+      <PetBrowser pets={filteredPets} onAdoptPet={handleAdoptPet} />
+    </div>
+  );
+}
+
+export default App;
+/*import React, { useEffect, useState } from "react";
 
 import Filters from "./Filters";
 import PetBrowser from "./PetBrowser";
@@ -59,4 +109,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;*/
