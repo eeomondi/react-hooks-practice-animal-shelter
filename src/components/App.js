@@ -1,53 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Filters from "./Filters";
 import PetBrowser from "./PetBrowser";
-import data from "..db.json";
 
 function App() {
-  const [filters, setFilters] = useState({ type: 'all' });
-  const [pets, setPets] = useState([]);
-
-  useEffect(() => {
-    fetchPets();
-  }, [filters]);
-
-  const onChangeType = (type) => {
-    setFilters({ type });
-  };
-
-  const onFindPetsClick = () => {
-    fetchPets();
-  };
-
-  const fetchPets = () => {
-    let filteredPets = data;
-    if (filters.type !== 'all') {
-      filteredPets = data.filter((pet) => pet.type === filters.type);
-    }
-    setPets(filteredPets);
-  };
-
-  const onAdoptPet = (id) => {
-    const petIndex = pets.findIndex((pet) => pet.id === id);
-    if (petIndex !== -1) {
-      const updatedPet = { ...pets[petIndex], isAdopted: true };
-      const updatedPets = [...pets.slice(0, petIndex), updatedPet, ...pets.slice(petIndex + 1)];
-      setPets(updatedPets);
-    }
-  };
-
-  return (
-    <div>
-      <Filters onChangeType={onChangeType} onFindPetsClick={onFindPetsClick} />
-      <PetBrowser pets={pets} onAdoptPet={onAdoptPet} />
-    </div>
-  );
-}
-
-export default App;
-
-/*function App() {
   const [pets, setPets] = useState([]);
   const [filters, setFilters] = useState({ type: "all" });
 
@@ -55,6 +11,16 @@ export default App;
     fetchPets();
   }, [filters]);
 
+  const fetchPets = async () => {
+    let url = "https://zoo-animal-api.herokuapp.com/animals";
+    if (filters.type !== "all") {
+      url += `?animal_type=${filters.type}`;
+    }
+    const response = await fetch(url);
+    const data = await response.json();
+    setPets(data);
+  };
+
   const onChangeType = (type) => {
     setFilters({ type });
   };
@@ -63,22 +29,17 @@ export default App;
     fetchPets();
   };
 
-  const fetchPets = () => {
-    let filteredPets = data;
-    if (filters.type !== 'all') {
-      filteredPets = data.filter((pet) => pet.type === filters.type);
-    }
-    setPets(filteredPets);
+  const onAdoptPet = (id) => {
+    setPets((prevPets) =>
+      prevPets.map((pet) => {
+        if (pet.id === id) {
+          return { ...pet, isAdopted: true };
+        }
+        return pet;
+      })
+    );
   };
 
-  const onAdoptPet = (id) => {
-    const petIndex = pets.findIndex((pet) => pet.id === id);
-    if (petIndex !== -1) {
-      const updatedPet = { ...pets[petIndex], isAdopted: true };
-      const updatedPets = [...pets.slice(0, petIndex), updatedPet, ...pets.slice(petIndex + 1)];
-      setPets(updatedPets);
-    }
-  };
   return (
     <div className="ui container">
       <header>
@@ -87,10 +48,10 @@ export default App;
       <div className="ui container">
         <div className="ui grid">
           <div className="four wide column">
-            <Filters />
+            <Filters onChangeType={onChangeType} onFindPetsClick={onFindPetsClick}/>
           </div>
           <div className="twelve wide column">
-            <PetBrowser />
+            <PetBrowser pets={pet} onAdoptPet={onAdoptPet} />
           </div>
         </div>
       </div>
@@ -98,4 +59,4 @@ export default App;
   );
 }
 
-export default App;*/
+export default App;
